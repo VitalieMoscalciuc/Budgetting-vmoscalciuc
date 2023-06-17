@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Hello World!</title>
+</head>
+<body>
+<h1 th:inline="text">Hello <span id="page-search-input" th:text="${user.get().getFirstName()+' '+user.get().getLastName()}"></span>!</h1>
+<div sec:authorize="isAuthenticated()">
+    Text visible only to authenticated users.
+</div>
+<br>
+
+<h1>Balance : <span th:text="${user.get().getBalance()}"></span></h1>
+
+
+<div>
+    <a href="/expensePage">Expenses List</a>
+</div>
+
+<div>
+    <a href="/incomePage">Incomes List</a>
+</div>
+
+<div>
+    <a href="/goalPage">Goals List</a>
+</div>
+
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>

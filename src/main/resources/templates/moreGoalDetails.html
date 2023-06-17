@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Goal Details</title>
+</head>
+<body>
+<h1>Goal Details</h1>
+<h2>Balance : <span th:text="${user.get().getBalance()}"></span></h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <td th:text="${goalDetails.name}"></td>
+    </tr>
+    <tr>
+        <th>Price</th>
+        <td th:text="${goalDetails.price}"></td>
+    </tr>
+    <tr>
+        <th>Dead Line</th>
+        <td th:text="${goalDetails.getDeadLine()}"></td>
+    </tr>
+    <tr>
+        <th>Days Remains Until Dead Line</th>
+        <td th:text="${goalDetails.getTimeRemains()}"></td>
+    </tr>
+    <tr>
+        <th>Investment</th>
+        <td th:text="${goalDetails.getInvestment()}"></td>
+    </tr>
+    <tr>
+        <th>Done By:</th>
+        <td th:text="${{goalDetails.getDoneBy() * 100}} + '%'"></td>
+    </tr>
+</table>
+<form role="form" th:action="@{/addInvestment}" method="post" th:object="${showGoalDto}">
+    <label class="form-label">Add funds to Goal:</label>
+    <input hidden name="id" th:field="${goalDetails.id}"/>
+    <input class="form-control"
+           id="amount"
+           name="amount"
+           placeholder="Enter goal Price"
+           th:field="*{amount}"
+           step="0.01" min="0.00" value="0.00"
+           type="number"
+    />
+    <input type="submit" value="Add investment"/>
+</form>
+<a href="/mainPage">Main Page</a>
+<a href="/goalPage">Goal Page</a>
+</body>
+</html>

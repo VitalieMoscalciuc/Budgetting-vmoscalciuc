@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Balance : <span th:text="${user.get().getBalance()}"></span></h1>
+<table>
+    <thead>
+    <tr>
+        <th> Name </th>
+        <th> Date </th>
+        <th> Amount </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="income : ${incomeList}">
+        <td><span th:text="${income.name}"></span></td>
+        <td><span th:text="${income.incomeDate}"></span></td>
+        <td><span th:text="${income.amount}"></span></td>
+        <td><a th:href="@{/updateIncome/{incomeId}(incomeId=${income.id})}">Update</a></td>
+        <td>
+            <form th:action="@{income/delete/{incomeId}(incomeId=${income.id})}" method="post">
+                <button type="submit" class="deletebtn">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a href="/saveIncome">Save Income</a>
+<a href="/mainPage">Main Page</a>
+</body>
+</html>

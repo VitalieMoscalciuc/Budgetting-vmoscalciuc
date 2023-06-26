@@ -27,7 +27,7 @@ public class ShowGoalDto {
 
     private Double investment;
 
-    private Double doneBy;
+    private String doneBy;
 
     private Long userId;
 

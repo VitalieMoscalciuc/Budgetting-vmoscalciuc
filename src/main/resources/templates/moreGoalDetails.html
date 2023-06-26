@@ -30,7 +30,7 @@
     </tr>
     <tr>
         <th>Done By:</th>
-        <td th:text="${{goalDetails.getDoneBy() * 100}} + '%'"></td>
+        <td th:text="${{goalDetails.getDoneBy()}} + '%'"></td>
     </tr>
 </table>
 <form role="form" th:action="@{/addInvestment}" method="post" th:object="${showGoalDto}">

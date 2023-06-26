@@ -13,6 +13,7 @@ import com.vmoscalciuc.budget.repository.impl.UserRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -135,6 +136,8 @@ public class GoalService {
         Goal goal = goalRepositoryImpl.findById(goalId);
         Duration duration = Duration.between(new Date().toInstant(), goal.getGoalDate().toInstant());
         long differenceInDays = duration.toDays();
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        String formattedDoneBy = decimalFormat.format(goal.getInvestment()/goal.getAmount()* 100);
         ShowGoalDto goalDto = new ShowGoalDto();
         goalDto.setId(goalId);
         goalDto.setName(goal.getName());
@@ -142,7 +145,7 @@ public class GoalService {
         goalDto.setDeadLine(convertDateToString(goal.getGoalDate()));
         goalDto.setTimeRemains(String.valueOf(differenceInDays));
         goalDto.setInvestment(goal.getInvestment());
-        goalDto.setDoneBy(goal.getInvestment()/goal.getAmount());
+        goalDto.setDoneBy(formattedDoneBy);
         return goalDto;
     }
 

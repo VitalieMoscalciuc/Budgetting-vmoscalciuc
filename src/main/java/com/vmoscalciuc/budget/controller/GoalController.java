@@ -37,7 +37,7 @@ public class GoalController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.findByEmail(authentication.getName());
         model.addAttribute("user",user);
-        model.addAttribute("goalList",goalService.findAll());
+        model.addAttribute("goalList",goalService.findAll(user.get().getId()));
         return "goalPage";
     }
 

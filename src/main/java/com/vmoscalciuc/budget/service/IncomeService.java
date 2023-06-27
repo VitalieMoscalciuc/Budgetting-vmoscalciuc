@@ -93,11 +93,11 @@ public class IncomeService {
 
     public void deleteIncome(Long incomeId){
         Income income = incomeRepositoryImpl.findById(incomeId);
-        userService.addToUserBalance(income.getUser().getId(), income.getAmount());
+        userService.updateUserBalance(income.getUser().getId(), income.getAmount());
         incomeRepositoryImpl.delete(incomeId);
     }
 
-    public List<Income> findAll() {
-        return incomeRepositoryImpl.findAll();
+    public List<Income> findAll(Long userId) {
+        return incomeRepositoryImpl.findAll(userId);
     }
 }

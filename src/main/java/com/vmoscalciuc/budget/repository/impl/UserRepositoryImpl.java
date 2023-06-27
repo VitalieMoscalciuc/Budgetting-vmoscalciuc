@@ -1,15 +1,13 @@
 package com.vmoscalciuc.budget.repository.impl;
 
-import com.vmoscalciuc.budget.model.User;
+import com.vmoscalciuc.budget.model.*;
 import com.vmoscalciuc.budget.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
@@ -17,22 +15,24 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
-    @PersistenceContext
-    private final EntityManager entityManager;
+    @Autowired
+    private final SessionFactory sessionFactory;
 
-//    public UserRepositoryImpl(EntityManager entityManager) {
-//        this.entityManager = entityManager;
-//    }
+    Session session = null;
+    Transaction transaction = null;
 
     @Override
     public User save(User u) {
         System.out.println("Saving User");
         EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-
-            entityManager.persist(u);
+            Role role = new Role();
+            role.setId(1L);
+            role.setName("USER");
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.merge(role);
+            session.persist(u);
 
             transaction.commit();
             return u;
@@ -46,15 +46,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void updateUserBalance(Long userId, Double updatedAmount) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            User user = entityManager.find(User.class, userId);
+            User user = session.find(User.class, userId);
             System.out.println("balance "+user.getBalance()+" - updated amount "+updatedAmount);
             user.setBalance(user.getBalance() - updatedAmount);
-            entityManager.merge(user);
+            session.merge(user);
 
             transaction.commit();
         } catch (Exception e) {
@@ -67,14 +66,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void addToUserBalance(Long userId, Double updatedAmount) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            User user = entityManager.find(User.class, userId);
+            User user = session.find(User.class, userId);
             user.setBalance(user.getBalance() + updatedAmount);
-            entityManager.merge(user);
+            session.merge(user);
 
             transaction.commit();
         } catch (Exception e) {
@@ -89,7 +87,8 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findById(Long userId) {
         System.out.println("finding by id");
-        TypedQuery<User> query = entityManager.createQuery(
+        Session session = sessionFactory.openSession();
+        TypedQuery<User> query = session.createQuery(
                 "SELECT u FROM User u WHERE u.id = :userId", User.class);
         query.setParameter("userId", userId);
         return query.getSingleResult();
@@ -99,7 +98,8 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
         System.out.println("finding by email from userRepositoryImpl");
-        TypedQuery<User> query = entityManager.createQuery(
+        Session session = sessionFactory.openSession(); // Obtain the current session from SessionFactory
+        TypedQuery<User> query = session.createQuery(
                 "SELECT u FROM User u WHERE u.email = :email", User.class);
         query.setParameter("email", email);
         try {
@@ -108,5 +108,6 @@ public class UserRepositoryImpl implements UserRepository {
             return Optional.empty();
         }
     }
+
 
 }

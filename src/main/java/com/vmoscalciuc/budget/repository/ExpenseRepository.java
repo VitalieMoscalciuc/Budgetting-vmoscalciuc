@@ -10,7 +10,7 @@ public interface ExpenseRepository {
 
         Expense findById(Long expenseId);
 
-        List<Expense> findAll();
+        List<Expense> findAll(Long userId);
 
         Expense update(Expense newExpense);
 

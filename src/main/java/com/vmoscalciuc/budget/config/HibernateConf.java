@@ -32,13 +32,8 @@ public class HibernateConf {
             throw he;
         }
     }
-
+    @Bean
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
-    @Bean
-    public EntityManager entityManager() {
-        return getSessionFactory().unwrap(SessionFactory.class).createEntityManager();
-    }
-
 }

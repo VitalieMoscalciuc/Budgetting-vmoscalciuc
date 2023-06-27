@@ -120,8 +120,8 @@ public class GoalService {
         goalRepositoryImpl.updateGoalInvestment(goalId, amount);
     }
 
-    public List<Goal> findAll() {
-        return goalRepositoryImpl.findAll();
+    public List<Goal> findAll(Long userId) {
+        return goalRepositoryImpl.findAll(userId);
     }
 
     private ShowGoalDto convertShowEntityToDto(Goal goal){

@@ -32,7 +32,7 @@ public class IncomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.findByEmail(authentication.getName());
         model.addAttribute("user",user);
-        model.addAttribute("incomeList",incomeService.findAll());
+        model.addAttribute("incomeList",incomeService.findAll(user.get().getId()));
         return "incomePage";
     }
 

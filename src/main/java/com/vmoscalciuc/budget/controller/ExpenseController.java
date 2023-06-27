@@ -36,8 +36,37 @@ public class ExpenseController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.findByEmail(authentication.getName());
         model.addAttribute("user",user);
-        model.addAttribute("expenseList",expenseService.findAll());
+        model.addAttribute("expenseList",expenseService.findAll(user.get().getId()));
         return "expensePage";
+    }
+
+    @PostMapping("/expense/save")
+    public String saveExpense(@Valid @ModelAttribute("expense") ExpenseDto expenseDto,
+                              BindingResult result,
+                              Model model) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> user = userService.findByEmail(authentication.getName());
+        expenseDto.setUserId(user.get().getId());
+        System.out.println("updating user Balance");
+        if (result.hasErrors()) {
+            System.out.println("expense save error");
+            return "saveExpense";
+        }
+        expenseService.saveExpense(expenseDto);
+        if(user.get().getBalance()>expenseDto.getAmount()){
+            userService.updateUserBalance(user.get().getId(), expenseDto.getAmount());
+        }
+        return "redirect:/expensePage";
+    }
+
+    @GetMapping("/saveExpense")
+    public String saveExpense(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> user = userService.findByEmail(authentication.getName());
+        model.addAttribute("user",user);
+        ExpenseDto expense = new ExpenseDto();
+        model.addAttribute("expense",expense);
+        return "saveExpense";
     }
 
 
@@ -74,38 +103,8 @@ public class ExpenseController {
     }
 
 
-    @GetMapping("/saveExpense")
-    public String saveExpense(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> user = userService.findByEmail(authentication.getName());
-        model.addAttribute("user",user);
-        ExpenseDto expense = new ExpenseDto();
-        model.addAttribute("expense",expense);
-        return "saveExpense";
-    }
 
-    @PostMapping("/expense/save")
-    public String saveExpense(@Valid @ModelAttribute("expense") ExpenseDto expenseDto,
-                               BindingResult result,
-                               Model model) throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> user = userService.findByEmail(authentication.getName());
-        System.out.println("hello expense");
-        expenseDto.setUserId(user.get().getId());
-        System.out.println(expenseDto.getUserId());
-        System.out.println(user.get().getEmail());
-        System.out.println("updating user Balance");
 
-        if (result.hasErrors()) {
-            System.out.println("expense save error");
-            return "saveExpense";
-        }
-        expenseService.saveExpense(expenseDto);
-        if(user.get().getBalance()>expenseDto.getAmount()){
-            userService.updateUserBalance(user.get().getId(), expenseDto.getAmount());
-        }
-        return "redirect:/expensePage";
-    }
 
     @PostMapping("/delete/{expenseId}")
     public String deleteUser(@PathVariable Long expenseId) {

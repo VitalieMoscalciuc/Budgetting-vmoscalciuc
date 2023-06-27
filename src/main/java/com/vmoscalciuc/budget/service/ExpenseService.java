@@ -26,6 +26,16 @@ public class ExpenseService {
     private final UserRepositoryImpl userRepositoryImpl;
     private final UserService userService;
 
+    public Expense saveExpense(ExpenseDto expenseDto) throws ParseException {
+        Expense expense = new Expense();
+        expense.setName(expenseDto.getName());
+        expense.setExpenseDate(convertStringToDate(expenseDto.getExpenseDate()));
+        expense.setAmount(expenseDto.getAmount());
+        expense.setUser(userRepositoryImpl.findById(expenseDto.getUserId()));
+        expenseRepositoryImpl.save(expense);
+        return convertDtoToEntity(expenseDto);
+    }
+
     public Date convertStringToDate(String convertedDate) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = dateFormat.parse(convertedDate);
@@ -37,15 +47,7 @@ public class ExpenseService {
     return dateString;
     }
 
-    public Expense saveExpense(ExpenseDto expenseDto) throws ParseException {
-        Expense expense = new Expense();
-        expense.setName(expenseDto.getName());
-        expense.setExpenseDate(convertStringToDate(expenseDto.getExpenseDate()));
-        expense.setAmount(expenseDto.getAmount());
-        expense.setUser(userRepositoryImpl.findById(expenseDto.getUserId()));
-        expenseRepositoryImpl.save(expense);
-        return convertDtoToEntity(expenseDto);
-    }
+
 
     public Expense updateExpense(ExpenseDto newExpense,Long oldExpenseId) throws ParseException {
         Expense expense = expenseRepositoryImpl.findById(oldExpenseId);
@@ -101,8 +103,8 @@ public class ExpenseService {
         expenseRepositoryImpl.delete(expenseId);
     }
 
-    public List<Expense> findAll() {
-        return expenseRepositoryImpl.findAll();
+    public List<Expense> findAll(Long userId) {
+        return expenseRepositoryImpl.findAll(userId);
     }
 
 }

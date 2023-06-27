@@ -1,15 +1,13 @@
 package com.vmoscalciuc.budget.repository.impl;
 
-import com.vmoscalciuc.budget.model.Expense;
 import com.vmoscalciuc.budget.model.Income;
 import com.vmoscalciuc.budget.repository.IncomeRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -17,17 +15,21 @@ import java.util.List;
 @Repository
 public class IncomeRepositoryImpl implements IncomeRepository {
 
-    @PersistenceContext
-    private final EntityManager entityManager;
+    @Autowired
+    private final SessionFactory sessionFactory;
+
+    Session session = null;
+    Transaction transaction = null;
+
+
     @Override
     public Income save(Income income) {
         System.out.println("Saving income");
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            entityManager.persist(income);
+            session.persist(income);
 
             transaction.commit();
             return income;
@@ -41,11 +43,11 @@ public class IncomeRepositoryImpl implements IncomeRepository {
 
     @Override
     public Income findById(Long incomeId) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-            Income income = entityManager.find(Income.class, incomeId);
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            Income income = session.find(Income.class, incomeId);
             transaction.commit();
             return income;
         } catch (Exception e) {
@@ -57,10 +59,12 @@ public class IncomeRepositoryImpl implements IncomeRepository {
     }
 
     @Override
-    public List<Income> findAll() {
+    public List<Income> findAll(Long userId) {
+        Session session = sessionFactory.openSession();
         System.out.println("finding all incomes");
-        TypedQuery<Income> query = entityManager.createQuery(
-                "SELECT i FROM Income i", Income.class);
+        TypedQuery<Income> query = session.createQuery(
+                "SELECT i FROM Income i where i.user.id = :userId", Income.class);
+        query.setParameter("userId", userId);
         try {
             return query.getResultList();
         } catch (NoResultException e) {
@@ -70,12 +74,11 @@ public class IncomeRepositoryImpl implements IncomeRepository {
 
     @Override
     public Income update(Income newIncome) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            entityManager.merge(newIncome);
+            session.merge(newIncome);
 
             transaction.commit();
         } catch (Exception e) {
@@ -89,13 +92,12 @@ public class IncomeRepositoryImpl implements IncomeRepository {
 
     @Override
     public void delete(Long incomeId) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            Income income = entityManager.find(Income.class, incomeId);
-            entityManager.remove(income);
+            Income income = session.find(Income.class, incomeId);
+            session.remove(income);
 
             transaction.commit();
         } catch (Exception e) {

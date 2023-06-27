@@ -4,9 +4,10 @@ import com.vmoscalciuc.budget.model.Goal;
 import com.vmoscalciuc.budget.model.Goal;
 import com.vmoscalciuc.budget.repository.GoalRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -16,17 +17,21 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class GoalRepositoryImpl implements GoalRepository {
-    @PersistenceContext
-    private final EntityManager entityManager;
+
+    @Autowired
+    private final SessionFactory sessionFactory;
+
+    Session session = null;
+    Transaction transaction = null;
+
     @Override
     public Goal save(Goal goal) {
         System.out.println("Saving goal");
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            entityManager.persist(goal);
+            session.persist(goal);
 
             transaction.commit();
             return goal;
@@ -40,12 +45,11 @@ public class GoalRepositoryImpl implements GoalRepository {
 
     @Override
     public Goal findById(Long goalId) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            Goal goal = entityManager.find(Goal.class, goalId);
+            Goal goal = session.find(Goal.class, goalId);
             System.out.println("goal id in repoimpl = "+goal.getId());
             transaction.commit();
             return goal;
@@ -58,10 +62,12 @@ public class GoalRepositoryImpl implements GoalRepository {
     }
 
     @Override
-    public List<Goal> findAll() {
+    public List<Goal> findAll(Long userId) {
+        Session session = sessionFactory.openSession();
         System.out.println("finding all goals");
-        TypedQuery<Goal> query = entityManager.createQuery(
-                "SELECT e FROM Goal e", Goal.class);
+        TypedQuery<Goal> query = session.createQuery(
+                "SELECT e FROM Goal e WHERE e.user.id = :userId", Goal.class);
+        query.setParameter("userId", userId);
         try {
             return query.getResultList();
         } catch (NoResultException e) {
@@ -71,12 +77,11 @@ public class GoalRepositoryImpl implements GoalRepository {
 
     @Override
     public Goal update(Goal newGoal) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            entityManager.merge(newGoal);
+            session.merge(newGoal);
 
             transaction.commit();
         } catch (Exception e) {
@@ -90,13 +95,12 @@ public class GoalRepositoryImpl implements GoalRepository {
 
     @Override
     public void delete(Long goalId) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            Goal goal = entityManager.find(Goal.class, goalId);
-            entityManager.remove(goal);
+            Goal goal = session.find(Goal.class, goalId);
+            session.remove(goal);
 
             transaction.commit();
         } catch (Exception e) {
@@ -109,14 +113,13 @@ public class GoalRepositoryImpl implements GoalRepository {
 
     @Override
     public void updateGoalInvestment(Long goalId,Double amount) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            Goal goal = entityManager.find(Goal.class, goalId);
+            Goal goal = session.find(Goal.class, goalId);
             goal.setInvestment(goal.getInvestment()+amount);
-            entityManager.merge(goal);
+            session.merge(goal);
 
             transaction.commit();
         } catch (Exception e) {

@@ -1,15 +1,13 @@
 package com.vmoscalciuc.budget.repository.impl;
 
 import com.vmoscalciuc.budget.model.Expense;
-import com.vmoscalciuc.budget.model.User;
 import com.vmoscalciuc.budget.repository.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -17,18 +15,21 @@ import java.util.List;
 @Repository
 public class ExpenseRepositoryImpl implements ExpenseRepository {
 
-    @PersistenceContext
-    private final EntityManager entityManager;
+    @Autowired
+    private final SessionFactory sessionFactory;
+
+    Session session = null;
+    Transaction transaction = null;
 
     @Override
     public Expense save(Expense expense) {
         System.out.println("Saving expense");
-        EntityTransaction transaction = null;
-        try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
 
-            entityManager.persist(expense);
+        try {
+            session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
+
+            session.persist(expense);
 
             transaction.commit();
             return expense;
@@ -37,17 +38,22 @@ public class ExpenseRepositoryImpl implements ExpenseRepository {
                 transaction.rollback();
             }
             throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
+
 
     @Override
     public Expense findById(Long expenseId) {
         EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            Expense expense = entityManager.find(Expense.class, expenseId);
+            Expense expense = session.find(Expense.class, expenseId);
             System.out.println("expense id in repoimpl = "+expense.getId());
             transaction.commit();
             return expense;
@@ -60,10 +66,12 @@ public class ExpenseRepositoryImpl implements ExpenseRepository {
     }
 
     @Override
-    public List<Expense> findAll() {
+    public List<Expense> findAll(Long userId) {
+        Session session = sessionFactory.openSession();
         System.out.println("finding all expenses");
-        TypedQuery<Expense> query = entityManager.createQuery(
-                "SELECT e FROM Expense e", Expense.class);
+        TypedQuery<Expense> query = session.createQuery(
+                "SELECT e FROM Expense e WHERE e.user.id = :userId", Expense.class);
+        query.setParameter("userId", userId);
         try {
             return query.getResultList();
         } catch (NoResultException e) {
@@ -73,12 +81,11 @@ public class ExpenseRepositoryImpl implements ExpenseRepository {
 
     @Override
     public Expense update(Expense newExpense) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-            entityManager.merge(newExpense);
+            session.merge(newExpense);
 
             transaction.commit();
         } catch (Exception e) {
@@ -92,13 +99,12 @@ public class ExpenseRepositoryImpl implements ExpenseRepository {
 
     @Override
     public void delete(Long expenseId) {
-        EntityTransaction transaction = null;
         try {
-            transaction = entityManager.getTransaction();
+            transaction = session.getTransaction();
             transaction.begin();
 
-            Expense expense = entityManager.find(Expense.class, expenseId);
-            entityManager.remove(expense);
+            Expense expense = session.find(Expense.class, expenseId);
+            session.remove(expense);
 
             transaction.commit();
         } catch (Exception e) {

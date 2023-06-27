@@ -29,4 +29,5 @@ public class Income {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 }

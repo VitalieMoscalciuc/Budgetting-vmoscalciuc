@@ -9,7 +9,7 @@ public interface IncomeRepository {
 
     Income findById(Long incomeId);
 
-    List<Income> findAll();
+    List<Income> findAll(Long userId);
 
     Income update(Income newIncome);
 

@@ -11,7 +11,7 @@ public interface GoalRepository {
 
     Goal findById(Long goalId);
 
-    List<Goal> findAll();
+    List<Goal> findAll(Long userId);
 
     Goal update(Goal newGoal);
 

@@ -37,4 +37,5 @@ public class Goal {
     @JoinColumn(name = "user_id")
     private User user;
 
+
 }

@@ -2,7 +2,6 @@ package com.vmoscalciuc.budget.security;
 
 import com.vmoscalciuc.budget.model.Role;
 import com.vmoscalciuc.budget.model.User;
-import com.vmoscalciuc.budget.repository.UserRepository;
 import com.vmoscalciuc.budget.repository.impl.UserRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,78 +1,307 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Goal Saving System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+        * {
+            padding: 0;
+            margin: 0;
+            border: 0;
+        }
+
+        *, *:before, *:after {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        :focus, :active {
+            outline: none;
+        }
+
+        a:focus, a:active {
+            outline: none;
+        }
+
+        nav, footer, header, aside {
+            display: block;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            font-size: 100%;
+            line-height: 1;
+            font-size: 14px;
+            -ms-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        input, button, textarea {
+            font-family: inherit;
+        }
+
+        input::-ms-clear {
+            display: none;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button::-moz-focus-inner {
+            padding: 0;
+            border: 0;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        a, a:visited {
+            text-decoration: none;
+        }
+
+        ul li {
+            list-style: none;
+        }
+
+        img {
+            vertical-align: top;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-size: inherit;
+            font-weight: inherit;
+        }
+
+        /*==============*/
+        html,
+        body {
+            height: 100%;
+            font-size: 24px;
+            color: #252B42;
+            font-family: "Montserrat";
+        }
+
+        [class*=__container] {
+            max-width: 1075px;
+            margin: 0 auto;
+            padding: 0 15px;
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box;
+        }
+
+        ._ibg {
+            position: relative;
+        }
+        ._ibg img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            -o-object-fit: cover;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+
+        /*=======================*/
+        .wrapper {
+            overflow: hidden;
+            min-height: 100%;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+        }
+
+        .header {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 50;
+            padding: 20px 0;
+        }
+        .header__logo {
+            font-weight: 700;
+            font-size: 30px;
+            line-height: 130%;
+        }
+
+        .page {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.65);
+            top: 0;
+            left: 0;
+            z-index: 4;
+            opacity: 1;
+            visibility: visible;
+        }
+        .page__image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        .page__body {
+            min-height: 100%;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            padding: 30px 10px;
+        }
+        .page__content {
+            background-color: #fff;
+            padding: 30px;
+            position: relative;
+        }
+        .page__title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 36px;
+        }
+        .page__sign-up {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .page__sign-up > * {
+            font-size: 20px;
+        }
+        .page__sign-up > a {
+            color: #0D5C63;
+            font-weight: 700;
+        }
+        .form__input:not(:last-child) {
+            margin-bottom: 22px;
+        }
+        .form__input > input {
+            width: 100%;
+            border: 2px solid #252B42;
+            padding: 12px 20px;
+            margin: 8px 0;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            font-size: 26px;
+        }
+        .form__title {
+            font-size: 24px;
+            font-weight: 500;
+        }
+        .form__buttons {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+        }
+        .form__btn {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            padding: 10px;
+            font-size: 28px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.8509803922);
+            background-color: #0D5C63;
+            border-radius: 15px;
+            max-width: 150px;
+            line-height: 98%;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+        }
+    </style>
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" th:fragment="header">
-    <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">Income Saving</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</nav>
-<br />
-<br />
-<br />
-<div class="container">
-    <div class="row col-md-8 offset-md-2">
-        <div class="card">
-            <div th:if="${param.success}">
-                <div class="alert alert-info">You've successfully added an income </div>
+<div class="wrapper">
+    <header id="header" class="header">
+        <div class="header__container">
+            <a href="/mainPage" class="header__logo">Budget</a>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Sign Out" />
+            </form>
+        </div>
+    </header>
+    <main class="page">
+        <div class="page__container">
+            <div id="popup" class="page">
+                <div class="page__body">
+                    <div class="page__content">
+
+                        <h1 class="page__title">Income</h1>
+                        <div class="page__sign-up">
+                            <h2 class="page__budget">Budget: <span th:text="${user.get().getBalance()}"></span></h2>
+                        </div>
+                        <form method="post" role="form" th:action="@{/income/save}" th:object="${income}" class="popup__form form">
+                            <div class="form__input">
+                                <span class="form__title">Income Name</span>
+                                <input id="name" name="name" placeholder="Enter income name" th:field="*{name}"
+                                       type="text">
+                                <p th:errors="*{name}" class="text-danger"
+                                   th:if="${#fields.hasErrors('name')}">
+                                </p>
+                            </div>
+                            <div class="form__input">
+                                <span class="form__title">Income Expire Date</span>
+                                <input id="incomeDate"
+                                       name="incomeDate"
+                                       th:field="*{incomeDate}"
+                                       type="date">
+                            </div>
+                            <div class="form__input">
+                                <span class="form__title">Income Amount</span>
+                                <input  id="amount"
+                                        name="amount"
+                                        placeholder="Enter your income amount"
+                                        th:field="*{amount}"
+                                        step="0.01" min="0.00" value="0.00"
+                                        type="number">
+                            </div>
+                            <div class="form__buttons">
+                                <button class="form__btn" type="submit">Save Income</button>
+                                <a href="/incomePage" class="form__btn">Main Page</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="card-header">
-                <h2 class="text-center">Income</h2>
-            </div>
-            <div class="card-body">
-                <h1>Balance : <span th:text="${user.get().getBalance()}"></span></h1>
-
-                <form method="post" role="form" th:action="@{/income/save}" th:object="${income}">
-
-                    <div class="form-group mb-3">
-                        <label class="form-label">Income Name</label>
-                        <input class="form-control" id="name" name="name" placeholder="Enter goal name" th:field="*{name}"
-                               type="text"
-                        />
-                        <p th:errors="*{name}" class="text-danger"
-                           th:if="${#fields.hasErrors('name')}">
-                        </p>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label class="form-label">Income Expire Date</label>
-                        <input class="form-control"
-                               id="goalDate"
-                               name="goalDate"
-                               th:field="*{incomeDate}"
-                               type="date"
-                        />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">Income Amount</label>
-                        <input class="form-control"
-                               id="amount"
-                               name="amount"
-                               placeholder="Enter your new income amount"
-                               th:field="*{amount}"
-                               step="0.01" min="0.00" value="0.00"
-                               type="number"
-                        />
-                    </div>
-                    <div class="form-group mb-3">
-                        <button class="btn btn-primary" type="submit">Save Income</button>
-
-                        <a href="/mainPage">Main Page</a>
-                    </div>
-                </form>
+            <div class="page__image _ibg">
+                <img src="../assets/img/cover.jpg" alt="background picture">
             </div>
         </div>
-    </div>
+    </main>
+    <footer class="footer">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, magni.
+    </footer>
 </div>
 </body>
+
 </html>

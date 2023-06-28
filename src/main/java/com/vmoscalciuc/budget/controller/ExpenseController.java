@@ -88,12 +88,7 @@ public class ExpenseController {
                               Model model) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.findByEmail(authentication.getName());
-        System.out.println("hello expenseId" +newexpenseDto.getId());
-        System.out.println(user.get().getEmail());
-        System.out.println("updating user Balance");
-        System.out.println("NewExpenseDtoId="+newexpenseDto.getId());
         Double newAmount = (newexpenseDto.getAmount());
-        System.out.println("new amount"+ newexpenseDto.getAmount());
         if (result.hasErrors()) {
             System.out.println("expense save error");
             return "updateExpense";
@@ -101,9 +96,6 @@ public class ExpenseController {
         expenseService.updateExpense(newexpenseDto,newexpenseDto.getId());
         return "redirect:/expensePage";
     }
-
-
-
 
 
     @PostMapping("/delete/{expenseId}")

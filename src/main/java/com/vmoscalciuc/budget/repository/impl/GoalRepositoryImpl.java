@@ -1,16 +1,13 @@
 package com.vmoscalciuc.budget.repository.impl;
 
 import com.vmoscalciuc.budget.model.Goal;
-import com.vmoscalciuc.budget.model.Goal;
 import com.vmoscalciuc.budget.repository.GoalRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 

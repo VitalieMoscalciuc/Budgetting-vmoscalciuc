@@ -59,9 +59,6 @@ public class GoalController {
                                 BindingResult result,
                                 Model model) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> user = userService.findByEmail(authentication.getName());
-        System.out.println(user.get().getEmail());
-        Double newAmount = (newgoalDto.getAmount());
         if (result.hasErrors()) {
             System.out.println("goal save error");
             return "updateGoal";

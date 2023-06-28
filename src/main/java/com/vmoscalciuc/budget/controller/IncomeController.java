@@ -55,11 +55,7 @@ public class IncomeController {
                                 Model model) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.findByEmail(authentication.getName());
-        System.out.println("hello incomeId" +newincomeDto.getId());
-        System.out.println(user.get().getEmail());
         System.out.println("updating user Balance");
-        System.out.println("NewIncomeDtoId="+newincomeDto.getId());
-        Double newAmount = (newincomeDto.getAmount());
         System.out.println("new amount"+ newincomeDto.getAmount());
         if (result.hasErrors()) {
             System.out.println("income save error");
@@ -86,10 +82,7 @@ public class IncomeController {
                               Model model) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.findByEmail(authentication.getName());
-        System.out.println("hello income");
         incomeDto.setUserId(user.get().getId());
-        System.out.println(incomeDto.getUserId());
-        System.out.println(user.get().getEmail());
         System.out.println("updating user Balance");
 
         if (result.hasErrors()) {

@@ -225,6 +225,9 @@
 <div class="wrapper">
     <div class="header">
         <h1 class="header__logo">Goal Details</h1>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out" />
+        </form>
     </div>
     <div class="page">
         <div class="page__body">
@@ -260,14 +263,14 @@
                 <form role="form" th:action="@{/addInvestment}" method="post" th:object="${showGoalDto}">
                     <label class="form__title">Add funds to Goal:</label>
                     <input hidden name="id" th:field="${goalDetails.id}"/>
-                    <input class="form__input"
-                           id="amount"
-                           name="amount"
-                           placeholder="Enter goal Price"
-                           th:field="*{amount}"
-                           step="0.01"
-                           type="number"
-                           required/>
+                    <div class="form__input">
+                        <span class="form__title">goal Amount</span>
+                        <input  id="amount"
+                                name="amount"
+                                th:field="*{amount}"
+                                step="0.01" min="0.00" value="0.00"
+                                type="number">
+                    </div>
                     <div class="form__buttons">
                         <button class="form__btn" type="submit">Add</button>
                     </div>
@@ -275,7 +278,7 @@
                 <br>
                 <div class="page__sign-up">
                     <p>If you want to go back to the goals page, click
-                        <a href="/user/goals">here</a>.</p>
+                        <a href="/goalPage"><b>here</b></a>.</p>
                 </div>
             </div>
         </div>

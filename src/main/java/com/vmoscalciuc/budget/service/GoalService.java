@@ -1,13 +1,9 @@
 package com.vmoscalciuc.budget.service;
 
 import com.vmoscalciuc.budget.model.Goal;
-import com.vmoscalciuc.budget.model.Goal;
-import com.vmoscalciuc.budget.model.Role;
 import com.vmoscalciuc.budget.model.User;
 import com.vmoscalciuc.budget.model.dto.GoalDto;
-import com.vmoscalciuc.budget.model.dto.GoalDto;
 import com.vmoscalciuc.budget.model.dto.ShowGoalDto;
-import com.vmoscalciuc.budget.model.dto.UserDto;
 import com.vmoscalciuc.budget.repository.impl.GoalRepositoryImpl;
 import com.vmoscalciuc.budget.repository.impl.UserRepositoryImpl;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +13,9 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.Instant;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -80,16 +72,6 @@ public class GoalService {
         Goal goal = goalRepositoryImpl.findById(oldGoalId);
         goal.setName(newGoal.getName());
         goal.setGoalDate(convertStringToDate(newGoal.getGoalDate()));
-//        if(newGoal.getAmount()>goal.getAmount()){
-//            System.out.println("Updating using balance in goal service from if");
-//            System.out.println("UserId= "+goal.getUser().getId());
-//            System.out.println("Old goal"+goal.getAmount());
-//            System.out.println("New Goal"+newGoal.getAmount());
-//            userService.addToUserBalance(goal.getUser().getId(), (goal.getAmount()-newGoal.getAmount()));
-//        }else{
-//            System.out.println("Updating using balance in goal service from else");
-//            userService.updateUserBalance(goal.getUser().getId(), newGoal.getAmount()-goal.getAmount());
-//        }
         goal.setAmount(newGoal.getAmount());
         goalRepositoryImpl.update(goal);
         return convertUpdatedDtoToEntity(newGoal);
@@ -110,7 +92,6 @@ public class GoalService {
 
     public void deleteGoal(Long goalId){
         Goal goal = goalRepositoryImpl.findById(goalId);
-        userService.addToUserBalance(goal.getUser().getId(), goal.getAmount());
         goalRepositoryImpl.delete(goalId);
     }
 

@@ -42,21 +42,21 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/index").setViewName("index");
-        registry.addViewController("/mainPage").setViewName("mainPage");
-        registry.addViewController("/login").setViewName("login");
-        registry.addViewController("/register").setViewName("register");
-        registry.addViewController("/expensePage").setViewName("expensePage");
-        registry.addViewController("/saveExpense").setViewName("saveExpense");
-        registry.addViewController("/updateExpense").setViewName("updateExpense");
-        registry.addViewController("/expense/update").setViewName("updateExpense");
-        registry.addViewController("/saveIncome").setViewName("saveIncome");
-        registry.addViewController("/updateIncome").setViewName("updateIncome");
-        registry.addViewController("/expense/Income").setViewName("updateIncome");
-        registry.addViewController("/saveGoal").setViewName("saveGoal");
-        registry.addViewController("/updateGoal").setViewName("updateGoal");
-        registry.addViewController("/expense/Goal").setViewName("updateGoal");
-        registry.addViewController("/moreGoalDetails").setViewName("moreGoalDetails");
+        registry.addViewController("/index");
+        registry.addViewController("/mainPage");
+        registry.addViewController("/login");
+        registry.addViewController("/register");
+        registry.addViewController("/expensePage");
+        registry.addViewController("/saveExpense");
+        registry.addViewController("/updateExpense");
+        registry.addViewController("/expense/update");
+        registry.addViewController("/saveIncome");
+        registry.addViewController("/updateIncome");
+        registry.addViewController("/expense/Income");
+        registry.addViewController("/saveGoal");
+        registry.addViewController("/updateGoal");
+        registry.addViewController("/expense/Goal");
+        registry.addViewController("/moreGoalDetails");
     }
 
 }

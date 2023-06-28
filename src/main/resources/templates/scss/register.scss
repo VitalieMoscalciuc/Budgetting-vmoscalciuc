@@ -1,0 +1,234 @@
+* {
+	padding: 0;
+	margin: 0;
+	border: 0;
+ }
+ 
+ *, *:before, *:after {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+ }
+ 
+ :focus, :active {
+	outline: none;
+ }
+ 
+ a:focus, a:active {
+	outline: none;
+ }
+ 
+ nav, footer, header, aside {
+	display: block;
+ }
+ 
+ html, body {
+	height: 100%;
+	width: 100%;
+	font-size: 100%;
+	line-height: 1;
+	font-size: 14px;
+	-ms-text-size-adjust: 100%;
+	-moz-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+ }
+ 
+ input, button, textarea {
+	font-family: inherit;
+ }
+ 
+ input::-ms-clear {
+	display: none;
+ }
+ 
+ button {
+	cursor: pointer;
+ }
+ 
+ button::-moz-focus-inner {
+	padding: 0;
+	border: 0;
+ }
+ 
+ a {
+	color: inherit;
+	
+ }
+ 
+ a, a:visited {
+	text-decoration: none;
+ }
+ 
+ ul li {
+	list-style: none;
+ }
+ 
+ img {
+	vertical-align: top;
+ }
+ 
+ h1, h2, h3, h4, h5, h6 {
+	font-size: inherit;
+	font-weight: inherit;
+ }
+
+
+ @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+/*==============*/
+$grey-color: #737373;
+$main-color: #252B42;
+$green-color: #0D5C63;
+
+html,
+body {
+  height: 100%;
+  font-size: 24px;
+  color: #252B42;
+  font-family: 'Montserrat';
+}
+
+[class*="__container"] {
+  max-width: 1075px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: content-box;
+}
+
+._ibg {
+	position: relative;
+
+	& img {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
+		object-fit: cover;
+		opacity: 0.9;
+	}
+} 
+
+ /*=======================*/
+
+.wrapper {
+	overflow: hidden;
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+.header {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 50;
+	background-color: rgb(239, 239, 239);
+	padding: 20px 0;
+	
+		&__container {	
+		}
+
+		&__logo {
+			font-weight: 700;
+			font-size: 30px;
+			line-height: 130%;
+		}
+}
+
+
+
+.page {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.65);
+	top: 0;
+	left: 0;
+	z-index: 54;
+	opacity: 1;
+	visibility: visible;
+	overflow-y: auto;
+
+	&__image {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+	}
+
+	&__body {
+		min-height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 30px 10px;
+	}
+
+	&__content {
+		background-color: #fff;
+		padding: 30px;
+		position: relative;
+	}
+
+	&__title {
+		text-align: center;
+		margin-bottom: 15px;
+		font-weight: 600;
+		font-size: 36px;
+	}
+
+	&__sign-up {
+		text-align: center;
+		margin-bottom: 50px;
+
+		& > * {
+			font-size: 20px;
+		}
+
+		& > a {
+			color: #0D5C63;
+			font-weight: 700;
+		}
+	}
+
+	&__form {
+	}
+}
+.form {
+	
+	&__input {
+
+		&:not(:last-child) {
+			margin-bottom: 22px;
+		}
+
+		&:nth-child(5) > input {
+			font-weight: 700;
+		}
+
+		& > input {
+			width: 100%;
+			border: 2px solid #252B42;
+  			padding: 12px 20px;
+  			margin: 8px 0;
+  			box-sizing: border-box;
+  			font-size: 26px;		
+		}	
+	}
+
+	&__title {
+		font-size: 20px;
+		font-weight: 500;
+	}
+
+	&__btn {
+		display: block;
+		padding: 9px;
+		font-size: 28px;	
+		margin: 0 auto;
+		color: #ffffffd9;
+		min-width: 100%;
+		background-color: #0D5C63;
+	}
+}

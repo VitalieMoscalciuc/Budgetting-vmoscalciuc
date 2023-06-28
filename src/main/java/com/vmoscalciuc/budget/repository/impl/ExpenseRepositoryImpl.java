@@ -24,13 +24,10 @@ public class ExpenseRepositoryImpl implements ExpenseRepository {
     @Override
     public Expense save(Expense expense) {
         System.out.println("Saving expense");
-
         try {
             session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-
             session.persist(expense);
-
             transaction.commit();
             return expense;
         } catch (Exception e) {
